@@ -132,27 +132,6 @@ const fs = require('fs');
 
 
 
-function checkBalance(balanceString) {
-
-    console.log('enteered')
-    // Extract the balance value
-    const balanceMatch = balanceString.match(/(\d+\.\d+)/);
-    const balance = balanceMatch ? parseFloat(balanceMatch[1]) : 0.00;
-
-    // Check if the balance is greater than 0.00
-    if (balance > 0.00) {
-        console.log('truuued')
-        // Perform your operation here
-        return true;
-    } else {
-        console.log('falseed')
-        // Balance is 0.00 or less
-        return false;
-    }
-
-}
-
-
 
 
 
@@ -475,9 +454,41 @@ const successOutputFilePath = 'success_output.txt';
 const failureOutputFilePath = 'failure_output.txt';
 const batchSize = 10;
 
-processFiles(dataFilePath, ipFilePath, successOutputFilePath, failureOutputFilePath, batchSize)
-    .then(() => console.log('All processes completed.'))
-    .catch(error => console.error('Error:', error));
+function checkBalance(balanceString) {
+    if (typeof balanceString === 'string') {
+        // Extract the balance value
+        const balanceMatch = balanceString.match(/(\d+\.\d+)/);
+        const balance = balanceMatch ? parseFloat(balanceMatch[1]) : 0.00;
+
+        // Check if the balance is greater than 0.00
+        if (balance > 0.00) {
+            console.log('truuued');
+            // Perform your operation here
+            return true;
+        } else {
+            console.log('falseed');
+            // Balance is 0.00 or less
+            return false;
+        }
+    } else {
+        console.log('Invalid balance string:', balanceString);
+        return false;
+    }
+}
+
+
+
+
+(async () => {
+    try {
+        await processFiles(dataFilePath, ipFilePath, successOutputFilePath, failureOutputFilePath, batchSize);
+        console.log('All processes completed.');
+    } catch (error) {
+        console.error('Error:', error);
+    }
+})();
+
+
 
 
 
